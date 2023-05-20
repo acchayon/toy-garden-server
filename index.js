@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 require('dotenv').config()
 const port = process.env.PORT || 5000;
@@ -34,6 +34,14 @@ async function run() {
     // get all toys in server
     app.get('/toys', async(req, res) => {
         const result = await toyCollection.find().toArray();
+        res.send(result)
+    })
+
+    // get specific id
+    app.get('/toys/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await toyCollection.findOne(query);
         res.send(result)
     })
 
