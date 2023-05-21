@@ -66,7 +66,7 @@ async function run() {
     })
 
     // update
-    app.put('/updatetoy/:id', async(req, res) => {
+    app.put('/toys/:id', async(req, res) => {
       const id = req.params.id;
       const body = req.body;
       const filter = {_id: new ObjectId(id)}
