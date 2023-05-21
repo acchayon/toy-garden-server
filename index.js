@@ -32,25 +32,31 @@ async function run() {
     const toyCollection = client.db('toyGarden').collection('toys')
 
     // get all toys in server
-    app.get('/toys', async(req, res) => {
-        const result = await toyCollection.find().toArray();
-        res.send(result)
+    app.get('/toys', async (req, res) => {
+      // console.log(req.params.text)
+      // if (req.params.text == 'panda' || req.params.text == 'honey' || req.params.text == 'coco') {
+      //   const result = await toyCollection.find({ name: req.params.text }).toArray();
+      //   return res.send(result)
+      // }
+      const result = await toyCollection.find().sort({ createdAt: -1 }).toArray();
+      res.send(result)
     })
 
     // get specific id
     app.get('/toys/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = {_id: new ObjectId(id)}
-        const result = await toyCollection.findOne(query);
-        res.send(result)
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await toyCollection.findOne(query);
+      res.send(result)
     })
 
     // post data
-    app.post('/addtoy', async(req, res) => {
-        const body = req.body;
-        const result = await toyCollection.insertOne(body)
-        res.send(result)
-        // console.log(body)
+    app.post('/addtoy', async (req, res) => {
+      const body = req.body;
+      body.createdAt = new Date();
+      const result = await toyCollection.insertOne(body)
+      res.send(result)
+      // console.log(body)
     })
 
 
@@ -69,9 +75,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Kids are playing with toys')
+  res.send('Kids are playing with toys')
 })
 
 app.listen(port, () => {
-    console.log(`toys are running on port: ${port}`)
+  console.log(`toys are running on port: ${port}`)
 })
