@@ -59,6 +59,28 @@ async function run() {
       // console.log(body)
     })
 
+    app.get('/mytoys/:email', async(req, res) => {
+      console.log(req.params.email)
+      const result = await toyCollection.find({seller_email : req.params.email}).toArray();
+      res.send(result)
+    })
+
+    // update
+    app.put('/updatetoy/:id', async(req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set: {
+          quantity_available: body.quantity_available,
+          description: body.description,
+          price: body.price
+        }
+      }
+      const result = await toyCollection.updateOne(filter, updateDoc);
+      res.send(result)
+    })
+
 
 
 
